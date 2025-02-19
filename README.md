@@ -98,3 +98,6 @@ v18.20.6
 root@ip-172-31-45-105:~/s3-file-upload# npm -v
 10.8.2                                                            
 ******************************************************************
+
+[AWS_S3_File_Upload_Guide.docx](https://github.com/user-attachments/files/18860571/AWS_S3_File_Upload_Guide.docx)
+
