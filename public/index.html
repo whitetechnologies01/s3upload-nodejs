@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload to S3</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #uploadForm {
+            border: 1px solid #ccc;
+            padding: 20px;
+            display: inline-block;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #message {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Upload File to AWS S3</h2>
+    <form id="uploadForm">
+        <input type="file" id="fileInput" required>
+        <button type="submit">Upload</button>
+    </form>
+    <p id="message"></p>
+
+    <script>
+        document.getElementById("uploadForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+            
+            const fileInput = document.getElementById("fileInput");
+            const message = document.getElementById("message");
+
+            if (fileInput.files.length === 0) {
+                message.textContent = "Please select a file!";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            try {
+                const response = await fetch("/upload", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    message.textContent = "File uploaded successfully!";
+                    message.style.color = "green";
+                    console.log("File URL:", result.url);
+                } else {
+                    throw new Error(result.message || "Upload failed");
+                }
+            } catch (error) {
+                message.textContent = "Error: " + error.message;
+                message.style.color = "red";
+            }
+        });
+    </script>
+
+</body>
+</html>
